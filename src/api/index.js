@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const url = 'http://localhost:8000'
-const admin = 'http://localhost:8000/admin'
+const url = 'https://mokumoku-van.herokuapp.com/'
+const admin = 'https://mokumoku-van.herokuapp.com/admin'
 
 export const fetchEvents = () => axios.get(url)
 export const createEvent = (newEvent) => axios.post(admin, newEvent)
