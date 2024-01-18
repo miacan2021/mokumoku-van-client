@@ -16,9 +16,9 @@ import {
   Paper,
   TextField,
   Alert,
-  Container,
+  Modal,
 } from '@mui/material'
-import { Body, HeroP } from './style/home'
+import { Body } from './style/home'
 import {
   BtnContainer,
   DetailContainer,
@@ -27,7 +27,8 @@ import {
   SlugSub,
 } from './style/slug'
 import { Link } from 'react-router-dom'
-import { AdminP, AdminSub } from './style/admin'
+import { AdminP } from './style/admin'
+import remarkGfm from 'remark-gfm'
 
 export const Slug = () => {
   const location = useLocation()
@@ -37,6 +38,7 @@ export const Slug = () => {
   const [memberNum, setMemberNum] = useState(event.members.length + 1)
   const dispatch = useDispatch()
   const date = moment(event.date).format('MMMM Do, h:mm a')
+  const [showThankYou, setShowThankYou] = useState(false)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -44,15 +46,38 @@ export const Slug = () => {
     dispatch(addMember(event._id, event.members))
     setMemberNum((prev) => prev + 1)
     setMember({ name: '', twitterId: '' })
+    setShowThankYou(true)
+    setTimeout(() => {
+      setShowThankYou(false)
+    }, 3000)
   }
 
   return (
     <Body>
       <SlugHeading>{event.title}</SlugHeading>
       <SlugConteiner>
+        {showThankYou ? (
+          <Modal
+            open={showThankYou}
+            onClose={() => setShowThankYou(false)}
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Alert severity="success" color="info">
+              Thank you for booking!
+            </Alert>
+          </Modal>
+        ) : (
+          <></>
+        )}
         <DetailContainer>
           <AdminP>
-            <ReactMarkdown>{event.description}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {event.description}
+            </ReactMarkdown>
           </AdminP>
           {event.map && (
             <>
@@ -69,9 +94,9 @@ export const Slug = () => {
         <DetailContainer>
           <TableContainer
             component={Paper}
-            sx={{ maxWidth: 300, m: 'auto', p: 3, mb:3}}
+            sx={{ maxWidth: 250, m: 'auto', p: 3, mb: 3 }}
           >
-            <SlugSub>Member</SlugSub>
+            <SlugSub>Member up to {event.limitNum}</SlugSub>
             <Table sx={{ maxWidth: 300, mx: 'auto' }}>
               <TableHead>
                 <TableRow>
@@ -92,6 +117,7 @@ export const Slug = () => {
               </TableBody>
             </Table>
           </TableContainer>
+
           <SlugSub>Join</SlugSub>
           {memberNum <= event.limitNum ? (
             <></>
@@ -100,7 +126,7 @@ export const Slug = () => {
               Sorry! All booked.
             </Alert>
           )}
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex' }}>
             <DetailContainer>
               <TextField
                 required
@@ -119,7 +145,16 @@ export const Slug = () => {
                 }
               />
               {memberNum <= event.limitNum ? (
-                <Button variant="contained" type="submit">
+                <Button
+                  sx={{
+                    m: 1,
+                    color: '#ffff',
+                    background: '#ef4565',
+                    ':hover': { color: '#ffff', background: '#ef4565' },
+                  }}
+                  variant="contained"
+                  type="submit"
+                >
                   submit
                 </Button>
               ) : (
@@ -132,11 +167,14 @@ export const Slug = () => {
         </DetailContainer>
       </SlugConteiner>
       <BtnContainer>
-      <Link to="/" style={{ textDecoration: 'none' }}>
-        <Button variant="contained">
-          Back
-        </Button>
-      </Link>
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <Button
+            sx={{ background: '#094067', ':hover': { background: '#90b4ce' } }}
+            variant="contained"
+          >
+            Back
+          </Button>
+        </Link>
       </BtnContainer>
     </Body>
   )

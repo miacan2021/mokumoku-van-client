@@ -19,9 +19,7 @@ import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import { HeroP } from '../../style/home'
 
 const Form = ({ currentId, setCurrentId }) => {
   const [eventData, setEventData] = useState({
@@ -78,16 +76,15 @@ const Form = ({ currentId, setCurrentId }) => {
       <Paper
         sx={{
           mx: 'auto',
-          maxWidth: 'md',
           p: 2,
           width: '90vw',
           pb: 5,
-          '@media screen and (min-width: 900px)': { p: 3 },
+          '@media screen and (min-width: 900px)': { p: 3,  maxWidth: 'md', },
         }}
       >
         <AdminHeading>{currentId ? 'Edit' : 'Add new'} event</AdminHeading>
         <FormFlex>
-          <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+          <form onSubmit={handleSubmit} style={{ width: '100%', margin: 'auto' }}>
             <AdminSub>Form</AdminSub>
             <Grid container spacing={3} direction="column" align="center">
               <Grid item xs={12}>

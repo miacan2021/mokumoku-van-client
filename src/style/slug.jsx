@@ -57,7 +57,6 @@ export const DetailContainer = styled.div`
   }
 `
 
-
 export const BtnContainer = styled.div`
   width: 100%;
   max-width: 1000px;
